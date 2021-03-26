@@ -1,24 +1,7 @@
-# hackaton
+# Projet pour le Space Office Hackaton
 
-## Project setup
-```
-npm install
-```
+Projet réalisé dans le cadre du Space Office Hackaton. 
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Concept
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Le concept du projet est un jeu dans sur le thème de *Mars* réalisé via Vue, VueX et Vue Router. 
