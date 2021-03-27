@@ -2,18 +2,18 @@
   "Weapons": 
   [
     {
-      "name":"Fusil piou pioui",
+      "name":"Assault weapon piou piou",
       "dmg":10
     },
     {
-      "name":"Poing américain boum boum",
+      "name":"Rifle boum boum",
       "dmg":15
     }
   ],
   "Healing": {
     "Potion": {
         "Name":"Potion",
-      "Price": 20,
+      "Price": 30,
       "Effect": 20
     }
   }

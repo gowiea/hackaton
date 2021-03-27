@@ -17,7 +17,7 @@ export default new Vuex.Store({
         armor: 10,
       },
       bag: {
-        gold: 10,
+        gold: 100,
         weaponId: 0,
         potionsQuantity: 1,
       },
@@ -41,8 +41,29 @@ export default new Vuex.Store({
       state.player.lvl++;
       state.player.xpMax = state.player.xpMax + 2;
       state.player.stats.armor = state.player.stats.armor + 3;
-      state.player.stats.hpMax = state.player.stats.hpMax +6 ;
+      state.player.stats.hpMax = state.player.stats.hpMax + 6;
       state.player.stats.attack = state.player.stats.attack + 3;
+    },
+    upgradeStat(state, option) {
+      switch (option) {
+        case "Armor":
+          state.player.stats.armor ++
+          break;
+        case "hpMax":
+          state.player.stats.hpMax ++
+          break;
+        case "Attack":
+          state.player.stats.attack ++
+          break;
+        default:
+          break;
+      }
+    },
+    buyPotions(state, amount){
+      state.player.bag.potionsQuantity = state.player.bag.potionsQuantity + amount;
+    },
+    usePotion(state){
+      state.player.bag.potionsQuantity--
     }
   },
   actions: {},

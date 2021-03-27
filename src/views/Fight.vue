@@ -41,7 +41,7 @@
         </div>
       </div>
     </div>
-    <div v-if="!wait" class="choices">
+    <div v-if="!wait && !fightEnd" class="choices">
       <button class="nes-btn" @click="attack()">Attack</button>
       <button class="nes-btn" @click="defend()">Defend</button>
       <button class="nes-btn" @click="heal()">Heal</button>
@@ -51,16 +51,28 @@
       <button class="nes-btn is-disabled">Defend</button>
       <button class="nes-btn is-disabled">Heal</button>
     </div>
+     <div class="history nes-container with-title">
+        <p class="title">Combat</p>
+        <p>{{ lastAction }}</p>
+        <div  v-if="fightEnd">
+          <p>Combat terminé, + XP + {{this.goldEarned}} Gold</p>
+          <router-link to="/shop">
+            <button class="nes-btn">Go to shop</button>
+          </router-link>
+          <router-link to="/nextFight">
+            <button class="nes-btn">Next</button>
+          </router-link>
+        </div>
+        
+      </div>
     <div class="nes-container">
       <div class="nes-container with-title">
         <p class="title">Inventaire</p>
         <p>Arme: {{ player.weapon.name }} ({{ player.weapon.damages }})</p>
-        <p>{{ player.potionsQuantity }} Potions</p>
+        <p>{{ this.$store.state.player.bag.potionsQuantity }} Potions</p>
+        <p>Bourse : {{ $store.state.player.bag.gold }} gold</p>
       </div>
-      <div class="history nes-container with-title">
-        <p class="title">Combat</p>
-        <p>{{ lastAction }}</p>
-      </div>
+     
     </div>
   </div>
 </template>
@@ -73,8 +85,9 @@ export default {
   data() {
     return {
       lastAction: "Fight begin",
+      fightEnd: false,
+      goldEarned:0,
       mob: {
-        // Valeur pour initalier les var parce qu'en, c'est motivié au beforeMount
         id: 0,
         name: "...",
         hpMax: 10,
@@ -96,7 +109,6 @@ export default {
           name: "Baton",
           damages: 0,
         },
-        potionsQuantity: this.$store.state.player.bag.potionsQuantity,
         lvl: this.$store.state.player.lvl,
         xp: this.$store.state.player.xp,
         xpMax: this.$store.state.player.xpMax,
@@ -107,22 +119,22 @@ export default {
   methods: {
     //Fonctions des boutons
     attack() {
-      let damages =
-        this.player.attack - this.mob.armor + this.player.weapon.damages;
-      if (this.mob.preventDamages) {
-        //Si *défend*
-        this.mob.hp = this.mob.hp - damages / 2;
-        this.mob.preventDamages = false;
-      } else {
-        this.mob.hp = this.mob.hp - damages;
+      let damages =this.player.attack - this.mob.armor + this.player.weapon.damages;
+      if (damages > 0) {
+        if (this.mob.preventDamages) {
+          //Si *défend*
+          this.mob.hp = this.mob.hp - damages / 2;
+          this.mob.preventDamages = false;
+        } else {
+          this.mob.hp = this.mob.hp - damages;
+        }
+        this.lastAction =
+          this.player.name +
+          " attaque " +this.mob.name + ' et lui inflige ' +damages +" damages";
       }
-      this.lastAction =
-        this.player.name +
-        " attaque " +
-        this.mob.name +
-        " et lui inflige " +
-        damages +
-        "damages";
+      else{
+        this.lastAction = this.player.name + " didn't make any damage"
+      }
       this.mobTurn();
     },
     defend() {
@@ -131,40 +143,50 @@ export default {
       this.mobTurn();
     },
     heal() {
-      if (this.player.potionsQuantity > 0 && this.player.hp < this.player.hpMax) {
-        this.player.hp = this.player.hp + items.Healing.Potion.Effect;
+      if (this.$store.state.player.bag.potionsQuantity > 0) {
+        if(this.player.hp < this.player.hpMax){
+          this.player.hp = this.player.hp + items.Healing.Potion.Effect;
         if (this.player.hp > this.player.hpMax) {
           this.player.hp = this.player.hpMax;
         }
-        this.player.potionsQuantity--
+        this.$store.commit("usePotion")
         this.mobTurn();
+        }
+        else{
+          this.lastAction ="hp full"
+        }
       } else {
-        this.lastAction = "Pas de potions dans l'inventaire/HP pleins";
+        this.lastAction = "Pas de potions dans l'inventaire";
       }
     },
     //Lance le tour du mob
     mobTurn() {
-      this.preventAction(); //Bloque les boutons pour empecher de spam
-      setTimeout(() => {
-        let damages = this.mob.attack - this.player.armor;
-        //Défini un timer pour laisser durer un peu
-        const luck = Math.round(Math.random() * 100);
-        if (luck > 20) {
-          if (this.player.preventDamages) {
-            //Si *défend*
-            this.player.hp = this.player.hp - damages / 2;
-            this.player.preventDamages = false;
+      if (this.mob.hp >= 0) {
+        this.preventAction(); //Bloque les boutons pour empecher de spam
+        setTimeout(() => {
+          let damages = this.mob.attack - this.player.armor;
+          //Défini un timer pour laisser durer un peu
+          const luck = Math.round(Math.random() * 100);
+          if (luck > 20) {
+            if (this.player.preventDamages) {
+              //Si *défend*
+              this.player.hp = this.player.hp - damages / 2;
+              this.player.preventDamages = false;
+            } else {
+              this.player.hp = this.player.hp - damages;
+            }
+            this.lastAction =
+              "Le monstre attaque et inflige " + damages + " dmg";
           } else {
-            this.player.hp = this.player.hp - damages;
+            this.mob.preventDamages = true;
+            this.lastAction = "Le monstre se prépare à se défendre";
           }
-          this.lastAction = "Le monstre attaque et infliges " + damages + "dmg";
-        } else {
-          this.mob.preventDamages = true;
-          this.lastAction = "Le monstre se prépare à se défendre";
-        }
-        this.wait = false;
-        this.checkIfDead();
-      }, 750);
+          this.wait = false;
+          this.checkIfDead();
+        }, 1250);
+      } else {
+        this.checkIfDead()
+      }
     },
     preventAction() {
       this.wait = true;
@@ -180,20 +202,18 @@ export default {
         this.mob.hp = 0;
         this.earnGold();
         this.earnXP();
-        this.$router.push({ path: "/wp" });
+        this.fightEnd = true;
       }
     },
     earnGold() {
-      let goldAmount = mobs[this.mob.id].goldLoot + 2 * this.player.lvl +
+      this.goldEarned =
+        mobs[this.mob.id].goldLoot +
+        2 * this.player.lvl +
         Math.round(Math.random() * (this.player.lvl * 1, 2));
-      this.$store.commit("earnGold", goldAmount);
+      this.$store.commit("earnGold", this.goldEarned);
     },
     earnXP() {
-      this.$store.commit(
-        "earnExp",
-        mobs[this.mob.id].xpLoot +
-          this.player.lvl +
-          Math.round(Math.random() * (this.player.lvl / 2))
+      this.$store.commit("earnExp",mobs[this.mob.id].xpLoot + this.player.lvl + Math.round(Math.random() * (this.player.lvl / 2))
       );
       this.checkIfLvlUp();
     },
@@ -219,9 +239,9 @@ export default {
           break;
       }
       this.mob.name = mobs[this.id].name;
-      this.mob.hpMax = mobs[this.id].hpMax;
-      this.mob.attack = mobs[this.id].attack;
-      this.mob.armor = mobs[this.id].armor;
+      this.mob.hpMax = mobs[this.id].hpMax + 5*this.player.lvl;
+      this.mob.attack = mobs[this.id].attack + 4*this.player.lvl;
+      this.mob.armor = mobs[this.id].armor + 4*this.player.lvl;
       this.mob.xpLoot = mobs[this.id].xpLoot;
 
       this.mob.hp = this.mob.hpMax;
@@ -280,7 +300,7 @@ export default {
     }
   }
   .history {
-    margin-top: 50px;
+    margin-bottom: 50px;
   }
 }
 </style>

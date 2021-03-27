@@ -2,7 +2,7 @@
   <div class="home">
     <img src="http://via.placeholder.com/350x100" alt="">
     <h1>Bertrand's Quest</h1>
-    <p>hackaton edition</p>
+    <p>Hackathon edition</p>
     <input class="nes-input" type="text" v-model='$store.state.player.name'>
     <router-link to="/select-weapon"><button class="nes-btn">Start new game</button></router-link>
   </div>

@@ -1,25 +1,25 @@
 [
     {
         "name":"Slime",
-        "hpMax":30,
-        "attack":15,
-        "armor":5,
+        "hpMax":25,
+        "attack":11,
+        "armor":1,
         "xpLoot":5,
         "goldLoot":5
     },
     {
-        "name":"Serpent",
-        "hpMax":20,
-        "attack":25,
-        "armor":10,
+        "name":"Snake",
+        "hpMax":15,
+        "attack":16,
+        "armor":6,
         "xpLoot":8,
         "goldLoot":5
     },
     {
         "name":"Boss",
-        "hpMax":100,
-        "attack":15,
-        "armor":25,
+        "hpMax":95,
+        "attack":11,
+        "armor":8,
         "xpLoot":25,
         "goldLoot":20
     }
