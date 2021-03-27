@@ -1,0 +1,23 @@
+[
+    {
+        "name":"Slime",
+        "hpMax":30,
+        "attack":15,
+        "armor":5,
+        "xpLoot":100
+    },
+    {
+        "name":"Serpent",
+        "hpMax":15,
+        "attack":10,
+        "armor":10,
+        "xpLoot":100
+    },
+    {
+        "name":"boss sa mère",
+        "hpMax":1500,
+        "attack":10,
+        "armor":10,
+        "xpLoot":100
+    }
+]

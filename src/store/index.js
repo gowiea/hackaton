@@ -5,12 +5,21 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    Health : 10
+    player:{
+      name:"Bertrand",
+      stats:{
+        hpMax: 50,
+        attack: 15,
+        armor: 10,
+      },
+      bag:{
+        gold: 10,
+        weaponId:"Fusil",
+        potionsQuantity:0
+      }
+    }
   },
   mutations: {
-    SubitDmg(state){
-      state.Health--
-    }
   },
   actions: {
   },

@@ -1,6 +1,10 @@
 <template>
   <div class="home">
-    <p @click="SubireDmg()" >{{$store.state.Health}}</p>
+    <img src="http://via.placeholder.com/350x100" alt="">
+    <h1>Bertrand's Quest</h1>
+    <p>hackaton edition</p>
+    <input class="nes-input" type="text" v-model='$store.state.player.name'>
+    <router-link to="/select-weapon"><button class="nes-btn">Start new game</button></router-link>
   </div>
 </template>
 
@@ -12,9 +16,7 @@ export default {
   components: {
   },
   methods:{
-    SubireDmg(){
-      this.$store.commit("SubitDmg")
-    }
+
   }
 }
 </script>
@@ -22,6 +24,20 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/css/_variables.scss";
 .home{
-  background: $bleu;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  button{
+    width: 200px;
+    height: 100px;
+  }
+  *{
+    padding: 20px 0;
+  }
+  input{
+    width: 50%;
+  }
 }
-</style>
+</style>*

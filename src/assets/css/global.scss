@@ -12,3 +12,17 @@
     font-family: "PressStart2P-Regular";
     color:black;
 }
+
+.container{
+    width: 1000px;
+    height: 100vh;
+    margin:auto;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
+@media (max-width:1000px) {
+    .container{
+        width: 100%;
+    }
+}

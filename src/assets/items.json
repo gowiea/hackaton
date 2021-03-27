@@ -1,0 +1,17 @@
+{
+  "Weapons": {
+    "Fusil": {
+      "dmg": 10
+    },
+    "Boomarang": {
+      "dmg": 20
+    }
+  },
+  "Healing": {
+    "Potion": {
+        "Name":"Potion",
+      "Price": 20,
+      "Effect": 20
+    }
+  }
+}
