@@ -1,10 +1,14 @@
 
 @import "@/assets/css/_variables.scss";
+@font-face {
+    font-family: "PressStart2P-Regular";
+    src: url("../fonts/PressStart2P-Regular.ttf");
+}
 *{
     margin:0;
     padding:0;
     box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
     text-decoration: none;
+    font-family: "PressStart2P-Regular";
     color:black;
 }
